@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
+const uuid = require("uuid");
+
 const exp = require("constants");
 const { response } = require("express");
 
@@ -28,20 +30,34 @@ app.get("/restaurants", function (req, res) {
   });
 });
 
+app.get("/restaurants/:id", function (req, res) {
+  const restaurantID = req.params.id;
+  const filPath = path.join(__dirname, "data", "restaurants.json");
+
+  const filData = fs.readFileSync(filPath);
+  const storedRestaurants = JSON.parse(filData);
+
+  for (const restaurant of storedRestaurants) {
+    if (restaurant.id === restaurantID) {
+      return res.render("restaurant-details", { restaurant: restaurant });
+    }
+  } 
+
+  res.status(404).render("404"); //handelling different ID 404 error
+});
+
 app.get("/recommend", function (req, res) {
   res.render("recommend");
 });
 
 app.post("/recommend", function (req, res) {
   const restaurant = req.body;
-  const filPath = path.join(__dirname, "data", "restaurants.json");
+  restaurant.id = uuid.v4();
+  const restaurants = getStoredRestaurants();
 
-  const filData = fs.readFileSync(filPath);
-  const storedRestaurants = JSON.parse(filData);
+  restaurants.push(restaurant);
 
-  storedRestaurants.push(restaurant);
-
-  fs.writeFileSync(filPath, JSON.stringify(storedRestaurants));
+  fs.writeFileSync(filPath, JSON.stringify(restaurants));
   res.redirect("/confirm");
 });
 
@@ -51,6 +67,14 @@ app.get("/confirm", function (req, res) {
 
 app.get("/about", function (req, res) {
   res.render("about");
+});
+
+app.use(function(req, res) { //handelling all 404 error
+  res.status(404).render("404");
+});
+
+app.use(function(error, req, res, next) { //handelling all 500/server side error
+  res.status(500).render("500");
 });
 
 app.listen(3000);

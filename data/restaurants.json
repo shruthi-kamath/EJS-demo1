@@ -1,1 +1,26 @@
-[{"name":"Test","address":"Test street","cuisine":"Test","website":"https://Test.com","description":"Testing"}]
+[
+  {
+    "id": "r1",
+    "name": "Test",
+    "address": "Test street",
+    "cuisine": "Test",
+    "website": "https://Test.com",
+    "description": "Testing"
+  },
+  {
+    "id": "r2",
+    "name": "Test 2",
+    "address": "test address 2",
+    "cuisine": "Mexican",
+    "website": "https://test2.com",
+    "description": "Nice"
+  },
+  {
+    "name": "NewName",
+    "address": "Testing address",
+    "cuisine": "Indian",
+    "website": "https://indian.com",
+    "description": "Best Indian restaurant",
+    "id": "a8bb76e0-b73c-4fb4-a840-8a8bf9b382b1"
+  }
+]
